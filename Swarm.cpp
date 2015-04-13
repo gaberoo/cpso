@@ -43,9 +43,9 @@ void PSO::Swarm::evaluate(int vflag, ostream* out, ostream* hist) {
   MPI::COMM_WORLD.Barrier();
 
 #else
-  double f(-INFINITY);
+  // double f(-INFINITY);
   for (size_t j = 0; j < swarm.size(); ++j) {
-    f = evaluateParticle(j);
+    /*f = */ evaluateParticle(j);
   }
 #endif
 }
