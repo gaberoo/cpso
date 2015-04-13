@@ -45,19 +45,11 @@ namespace PSO {
           bestVal(-INFINITY), bestParticle(-1),
           mpi_type(0), mpi_rank(0), mpi_ntasks(1)
       {
-        swarm = vector<Particle*>(size,NULL);
-        for (int i(0); i < size; ++i) swarm[i] = new Particle(np);
         bestPos = Point(np,0.0);
         setInformants(numInform);
       }
 
-      virtual ~Swarm() {
-        for (size_t i = 0; i < swarm.size(); ++i) {
-          delete swarm[i];
-          swarm[i] = NULL;
-        }
-        swarm.clear();
-      }
+      virtual ~Swarm() { destroy(); }
 
       inline void setMPI(int type) { mpi_type = (type >= 0) ? type : 0; }
 

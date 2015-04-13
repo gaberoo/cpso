@@ -6,6 +6,7 @@ LD = g++
 #CFLAGS += -DUNROLL
 CFLAGS += -g -m64 -Wall -O3
 FFLAGS += -g -m64 -Wall -O3
+LDFLAGS += -lstdc++ -lgsl
 
 # uncomment for GNU GCC
 #CC = icc

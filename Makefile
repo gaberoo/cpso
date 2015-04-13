@@ -37,7 +37,9 @@ Point_mpi.o: Point.cpp Point.h
 
 ##############################################################################
 
-lib: Swarm.o Particle.o Point.o
+lib: libpso.a
+
+libpso.a: Swarm.o Particle.o Point.o
 	ar crs libpso.a Swarm.o Particle.o Point.o
 
 mpilib: Swarm_mpi.o Particle_mpi.o Point_mpi.o
@@ -45,6 +47,6 @@ mpilib: Swarm_mpi.o Particle_mpi.o Point_mpi.o
 
 ##############################################################################
 
-test: test.o $(OBJ)
-	$(CPP) -o test test.o $(OBJ) $(LDFLAGS)
+test: test.cpp libpso.a
+	$(CPP) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
 
