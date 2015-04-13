@@ -51,7 +51,13 @@ namespace PSO {
         setInformants(numInform);
       }
 
-      virtual ~Swarm() {}
+      virtual ~Swarm() {
+        for (int i(0); i < size; ++i) {
+          delete swarm[i];
+          swarm[i] = NULL;
+        }
+        swarm.clear();
+      }
 
       inline void setMPI(int type) { mpi_type = (type >= 0) ? type : 0; }
 
