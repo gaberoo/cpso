@@ -42,7 +42,7 @@ lib: libpso.a
 libpso.a: Swarm.o Particle.o Point.o
 	ar crs libpso.a Swarm.o Particle.o Point.o
 
-mpilib: Swarm_mpi.o Particle_mpi.o Point_mpi.o
+libpso_mpi.a: Swarm_mpi.o Particle_mpi.o Point_mpi.o
 	ar crs libpso_mpi.a Swarm_mpi.o Particle_mpi.o Point_mpi.o
 
 ##############################################################################

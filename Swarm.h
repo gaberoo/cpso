@@ -117,6 +117,7 @@ namespace PSO {
       void destroy();
 
       void init_network();
+      int find_best();
 
       int swarmSize;                            /* swarm size */
       vector<Particle*> swarm;                  /* swarm */

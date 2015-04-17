@@ -258,17 +258,20 @@ void PSO::Swarm::updateVelocity(int j) {
   rg = rng.uniform();
 
   // get informants for particle
-  double f(-INFINITY);
-  int bestInfId(bestParticle);
+  double f = -INFINITY;
+  int bestInfId = bestParticle;
   Particle* bestInformant(swarm[bestParticle]);
 
+  // find best informant
   if (numInform < swarmSize-1) {
     set<int>::const_iterator nn;
     for (nn = links.nn_begin(j); nn != links.nn_end(j); ++nn) {
-      if (swarm[*nn]->bestValue > f) {
+      if (swarm[*nn]->value > f) {
+//      if (swarm[*nn]->bestValue > f) {
         bestInfId = *nn;
         bestInformant = swarm[*nn];
-        f = bestInformant->bestValue;
+        f = bestInformant->value;
+//        f = bestInformant->bestValue;
       }
     }
   }
@@ -285,9 +288,13 @@ void PSO::Swarm::updateVelocity(int j) {
           break;
         case REAL:
         default:
+          // distance from my best position
           dp = swarm[j]->bestPosition[i] - swarm[j]->position[i];
-          // dg = bestPos[i] - swarm[j]->position[i];
+          // distance from my best informant
+          // dg = bestInformant->position[i] - swarm[j]->position[i];
           dg = bestInformant->bestPosition[i] - swarm[j]->position[i];
+          // dg = bestPos[i] - swarm[j]->position[i];
+          // use the current positions of the particles as information
           break;
       }
 
@@ -597,4 +604,17 @@ void PSO::Swarm::init_network() {
   }
 }
 
+// ===========================================================================
+
+int PSO::Swarm::find_best() {
+  bestParticle = 0;
+  double val = -INFINITY;
+  for (int j = 0; j < swarmSize; ++j) {
+    if (swarm[j]->fitness() > val) {
+      val = swarm[j]->fitness();
+      bestParticle = j;
+    }
+  }
+  return bestParticle;
+}
 
