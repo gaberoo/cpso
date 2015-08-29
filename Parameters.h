@@ -64,7 +64,7 @@ inline void PSO::Parameters::from_json(rapidjson::Value& jpars) {
     m1 = d[i].FindMember("limits"); 
     if (m1 != d[i].MemberEnd()) {
       if (! m1->value.IsArray()) throw "Bad variables limits.";
-      if (! m1->value.Size() == 2) throw "Bad variables limits.";
+      if (! (m1->value.Size() == 2)) throw "Bad variables limits.";
       rapidjson::SizeType j;
       j = 0; lb[i] = m1->value[j].GetDouble();
       j = 1; ub[i] = m1->value[j].GetDouble();
