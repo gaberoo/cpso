@@ -46,6 +46,14 @@ namespace PSO {
         lb[i] = x;
         ub[i] = x;
       }
+
+      inline double initVar(int i) const {
+        if (i >= 0 && i < numParams) {
+          return 0.5*(lb[i]+ub[i]);
+        } else {
+          return 0.0;
+        }
+      }
   };
 }
 

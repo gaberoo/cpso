@@ -248,14 +248,13 @@ void PSO::Swarm::randomPosition(int j) {
 
 // ===========================================================================
 
-void PSO::Swarm::updateVelocity(int j) {
-  double rp;
-  double rg;
-  double dg;
-  double dp;
-  int i;
-  rp = rng.uniform();
-  rg = rng.uniform();
+void PSO::Swarm::updateVelocity(int j, bool bestVals) 
+{
+  double dg = 0.0;
+  double dp = 0.0;
+
+  double rp = rng.uniform();
+  double rg = rng.uniform();
 
   // get informants for particle
   double f = -INFINITY;
@@ -278,23 +277,29 @@ void PSO::Swarm::updateVelocity(int j) {
 
 
   // Shi, Eberhart (1998, 2001)
-  for (i = 0; i < numParams; ++i) {
+  for (int i = 0; i < numParams; ++i) {
     if (! p->locked[i]) {
       switch (p->type[i]) {
         case INTEGER:
-          dp = round(swarm[j]->bestPosition[i]) - round(swarm[j]->position[i]);
+          // distance from my best position
+          dp = round(swarm[j]->bestPosition[i]) 
+              - round(swarm[j]->position[i]);
           // dg = round(bestPos[i]) - round(swarm[j]->position[i]);
-          dg = round(bestInformant->bestPosition[i]) - round(swarm[j]->position[i]);
+
+          // distance from my best informant
+          dg = round(bestInformant->bestPosition[i]) 
+               - round(swarm[j]->position[i]);
           break;
+
         case REAL:
         default:
           // distance from my best position
           dp = swarm[j]->bestPosition[i] - swarm[j]->position[i];
+
           // distance from my best informant
-          // dg = bestInformant->position[i] - swarm[j]->position[i];
-          dg = bestInformant->bestPosition[i] - swarm[j]->position[i];
-          // dg = bestPos[i] - swarm[j]->position[i];
           // use the current positions of the particles as information
+          dg = bestInformant->position[i] - swarm[j]->position[i];
+          // dg = bestInformant->bestPosition[i] - swarm[j]->position[i];
           break;
       }
 
@@ -313,10 +318,10 @@ void PSO::Swarm::updateVelocity(int j) {
 
 // ===========================================================================
 
-void PSO::Swarm::updateVelocity() {
+void PSO::Swarm::updateVelocity(bool bestVals) {
   for (int j(0); j < swarmSize; ++j) {
     // if (j == bestParticle) continue;
-    updateVelocity(j);
+    updateVelocity(j,bestVals);
   }
 }
 
@@ -456,7 +461,8 @@ void PSO::Swarm::run_master(int numIt, int vflag, ostream* out, ostream* hist) {
 // ===========================================================================
 
 void PSO::Swarm::run(int numEvals, int slowdown, int vflag, 
-                     ostream* out, ostream* hist) {
+                     ostream* out, ostream* hist) 
+{
   int numIt = numEvals / swarm.size();
   for (int i(0); i < numIt; ++i) {
     if (slowdown) {
@@ -474,7 +480,9 @@ void PSO::Swarm::run(int numEvals, int slowdown, int vflag,
     evaluate();
     if (hist != NULL) {
       for (int id(0); id < swarmSize; ++id) {
-        *hist << setw(4) << id << " " << scientific << (*swarm[id]) << endl;
+        *hist << setw(4) << i << " " 
+              << setw(4) << id << " " 
+              << scientific << (*swarm[id]) << endl;
       }
     }
     if (out != NULL) {

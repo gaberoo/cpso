@@ -79,10 +79,12 @@ namespace PSO {
       virtual void evaluate(int vflag = 0, ostream* out = NULL, ostream* hist = NULL);
       virtual double evaluateParticle(int j);
 
-      void updateVelocity(int j);
-      void updateVelocity();
+      void updateVelocity(int j, bool bestVals = true);
+      void updateVelocity(bool bestVals = true);
+
       void updatePosition(int j);
       void updatePosition();
+
       void randomizeInf(int maxTries = 1000);
       void randomPosition(int j);
 
