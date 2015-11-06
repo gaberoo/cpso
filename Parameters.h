@@ -4,6 +4,8 @@
 #include <vector>
 #include <rapidjson/document.h>
 
+#include "Point.h"
+
 namespace PSO {
   using namespace std;
   enum VarType { REAL, INTEGER };
