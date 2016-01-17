@@ -2,7 +2,7 @@
 #define __PSO_PARAMETERS__
 
 #include <vector>
-#include <rapidjson/document.h>
+#include "rapidjson/document.h"
 
 #include "Point.h"
 
