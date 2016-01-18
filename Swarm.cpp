@@ -190,6 +190,11 @@ void PSO::Swarm::initialize(int type) {
   }
   for (j = 0; j < swarmSize; ++j) {
     for (i = 0; i < numParams; ++i) {
+      //cerr << i << " <> " << j << endl;
+      //cerr << p->locked[i] << endl;
+      //cerr << p->lb[i] << endl;
+      //cerr << p->ub[i] << endl;
+      //cerr << p->scale[i] << endl;
       if (p->locked[i]) randPos = p->lb[i];
       else {
         if (type == 1) {
@@ -463,6 +468,8 @@ void PSO::Swarm::run_master(int numIt, int vflag, ostream* out, ostream* hist) {
 void PSO::Swarm::run(int numEvals, int slowdown, int vflag, 
                      ostream* out, ostream* hist) 
 {
+  if (vflag) cerr << "Starting run..." << endl;
+
   int numIt = numEvals / swarm.size();
   for (int i(0); i < numIt; ++i) {
     if (slowdown) {
