@@ -473,7 +473,7 @@ void PSO::Swarm::run(int numEvals, int slowdown, int vflag,
   int numIt = numEvals / swarm.size();
 
   for (int i = 1; i <= numIt; ++i) {
-    setIt(i);
+    curIt = i;
 
     if (slowdown) {
       for (int j = 0; j < numParams; ++j) {
@@ -513,17 +513,6 @@ void PSO::Swarm::run(int numEvals, int slowdown, int vflag,
            << ", fx = " << scientific << bestVal
            << fixed << endl;
     }
-    /*
-    if (vflag) {
-      cerr << "[" << i << "] best solution: " << bestVal;
-      cerr << " at x = (";
-      for (size_t j(0); j < bestPos.size(); ++j) {
-        cerr << bestPos[j];
-        if (j < bestPos.size()-1) cerr << ",";
-      }
-      cerr << ")" << endl;
-    }
-    */
   }
   if (vflag) cerr << endl;
 }
