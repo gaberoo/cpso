@@ -39,7 +39,8 @@ namespace PSO {
       Swarm() {}
 
       Swarm(int size, int np, Parameters* pars) 
-        : swarmSize(size), numParams(np), numEvals(0), numInform(3), 
+        : swarmSize(size), numParams(np), numEvals(0), curIt(0),
+          numInform(3), 
           phiPi(np,2.5), phiPf(np,0.5), phiGi(np,0.5),phiGf(np,2.5),
           omegai(np,0.721), omegaf(np,0.721), p(pars),
           bestVal(-INFINITY), bestParticle(-1),
@@ -102,6 +103,9 @@ namespace PSO {
 
       inline int size() const { return swarmSize; }
 
+      inline int nextIt() { return ++curIt; }
+      inline void setIt(int i) { curIt = i; }
+
       double mean(int i) const;
       double var(int i) const;
       Point mean() const;
@@ -125,6 +129,7 @@ namespace PSO {
       vector<Particle*> swarm;                  /* swarm */
       int numParams;                            /* number of parameters */
       int numEvals;                             /* current number of function evaluations */
+      int curIt;                                /* current swarm iteration */
 
       int numInform;                            /* number of informants */
       Network links;                            /* information network */

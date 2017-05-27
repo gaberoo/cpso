@@ -31,7 +31,7 @@ namespace PSO {
       double ssd;                               /* search space diameter */
       double stag_t;                            /* stagnation threshold */
 
-      double (*evalFunc)(const Point& x, const void* params);
+      double (*evalFunc)(int gen, int id, const Point& x, const void* params);
       void* evalParams;
 
       inline void resize(size_t n) {

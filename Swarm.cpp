@@ -54,7 +54,7 @@ void PSO::Swarm::evaluate(int vflag, ostream* out, ostream* hist) {
 
 double PSO::Swarm::evaluateParticle(int j) {
   double f(-INFINITY);
-  f = p->evalFunc(swarm[j]->position,p->evalParams);
+  f = p->evalFunc(curIt,j,swarm[j]->position,p->evalParams);
   swarm[j]->value = f;
   if (f >= swarm[j]->bestValue) {
     swarm[j]->bestPosition = swarm[j]->position;
@@ -145,7 +145,7 @@ void PSO::Swarm::evaluate_slave() {
     MPI::COMM_WORLD.Recv(&id,1,MPI::INT,0,MPI::ANY_TAG,status);
     if (status.Get_tag() == 0) break;
     MPI::COMM_WORLD.Recv(position.data(),numParams,MPI::DOUBLE,0,MPI::ANY_TAG,status);
-    f = p->evalFunc(position,p->evalParams);
+    f = p->evalFunc(curIt,id,position,p->evalParams);
     MPI::COMM_WORLD.Send(&id,1,MPI::INT,0,2);
     MPI::COMM_WORLD.Send(&f,1,MPI::DOUBLE,0,2);
 //    }
@@ -471,7 +471,10 @@ void PSO::Swarm::run(int numEvals, int slowdown, int vflag,
   if (vflag) cerr << "Starting run..." << endl;
 
   int numIt = numEvals / swarm.size();
+
   for (int i(0); i < numIt; ++i) {
+    curIt = i;
+
     if (slowdown) {
       for (int j(0); j < numParams; ++j) {
         if (phiPf[j] > phiPi[j]) 
@@ -482,9 +485,11 @@ void PSO::Swarm::run(int numEvals, int slowdown, int vflag,
           omega[j] = omegai[j] + (omegaf[j]-omegai[j])*((1.*numIt-i)/numIt);
       }
     }
+
     updateVelocity();
     updatePosition();
     evaluate();
+
     if (hist != NULL) {
       for (int id(0); id < swarmSize; ++id) {
         *hist << setw(4) << i << " " 
@@ -492,11 +497,13 @@ void PSO::Swarm::run(int numEvals, int slowdown, int vflag,
               << scientific << (*swarm[id]) << endl;
       }
     }
+
     if (out != NULL) {
       *out << setw(6) << i*swarm.size() << " ";
       // *out << scientific << *swarm[bestParticle] << endl;
       *out << scientific << bestVal << " " << bestPos << endl;
     } 
+
     if (vflag) {
       cerr << "[";
       int progress = i/(numIt/30);

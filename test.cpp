@@ -6,7 +6,7 @@ using namespace std;
 #include "Swarm.h"
 using namespace PSO;
 
-double eval(const Point& x, const void* params) {
+double eval(int gen, int id, const Point& x, const void* params) {
   double f;
   f = -(x[0]-10)*(x[0]-10) - (x[1]-5)*(x[1]-5) + 10;
   return f;
