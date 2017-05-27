@@ -472,17 +472,17 @@ void PSO::Swarm::run(int numEvals, int slowdown, int vflag,
 
   int numIt = numEvals / swarm.size();
 
-  for (int i(0); i < numIt; ++i) {
-    curIt = i;
+  for (int i = 1; i <= numIt; ++i) {
+    setIt(i);
 
     if (slowdown) {
-      for (int j(0); j < numParams; ++j) {
+      for (int j = 0; j < numParams; ++j) {
         if (phiPf[j] > phiPi[j]) 
-          phiP[j] = phiPi[j] + (phiPf[j]-phiPi[j])*((1.*numIt-i)/numIt);
+          phiP[j] = phiPi[j] + (phiPf[j]-phiPi[j])*((1.*numIt-i-1)/numIt);
         if (phiGf[j] > phiGi[j]) 
-          phiG[j] = phiGi[j] + (phiGf[j]-phiGi[j])*((1.*numIt-i)/numIt);
+          phiG[j] = phiGi[j] + (phiGf[j]-phiGi[j])*((1.*numIt-i-1)/numIt);
         if (omegaf[j] > omegai[j]) 
-          omega[j] = omegai[j] + (omegaf[j]-omegai[j])*((1.*numIt-i)/numIt);
+          omega[j] = omegai[j] + (omegaf[j]-omegai[j])*((1.*numIt-i-1)/numIt);
       }
     }
 
@@ -491,7 +491,7 @@ void PSO::Swarm::run(int numEvals, int slowdown, int vflag,
     evaluate();
 
     if (hist != NULL) {
-      for (int id(0); id < swarmSize; ++id) {
+      for (int id = 0; id < swarmSize; ++id) {
         *hist << setw(4) << i << " " 
               << setw(4) << id << " " 
               << scientific << (*swarm[id]) << endl;
@@ -507,11 +507,11 @@ void PSO::Swarm::run(int numEvals, int slowdown, int vflag,
     if (vflag) {
       cerr << "[";
       int progress = i/(numIt/30);
-      for (int a(0); a < progress; ++a) cerr << "=";
-      for (int a(progress); a < 30; ++a) cerr << " ";
+      for (int a = 0; a < progress; ++a) cerr << "=";
+      for (int a = progress; a < 30; ++a) cerr << " ";
       cerr << "] " << i << "/" << numIt << " best = " << bestPos
            << ", fx = " << scientific << bestVal
-           << fixed << "                    \r";
+           << fixed << endl;
     }
     /*
     if (vflag) {
